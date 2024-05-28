@@ -58,6 +58,23 @@ class Game:
         self.show_score()
         pygame.display.update()
 
+    def draw_game(self, frames):
+        snake_body_list, fruit_positions_list = frames
+
+        for pos_list in snake_body_list:
+            self.window.fill(BLACK)
+            for pos in pos_list:
+                pygame.draw.rect(self.window, GREEN, pygame.Rect(pos[0], pos[1], 10, 10))
+
+            fruit_pos = fruit_positions_list[0]
+            pygame.draw.rect(self.window, RED, pygame.Rect(fruit_pos[0], fruit_pos[1], 10, 10))
+            self.show_score()
+            pygame.display.update()
+
+            fruit_positions_list.pop(0)
+            
+            self.clock.tick(1)
+
     def run(self):
         while True:
             for event in pygame.event.get():
