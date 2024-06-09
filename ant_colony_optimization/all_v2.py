@@ -12,8 +12,9 @@ SNAKE_INITIAL_BODY = [[40, 0], [30, 0], [20, 0], [10, 0]]
 
 NUMBER_OF_FRUITS = 10
 
-NUMBER_OF_ANTS = 1
-ITERATIONS = 1
+NUMBER_OF_ANTS = 100
+ITERATIONS = 100
+PHEROMONE_EVAPORATION_RATE = 0.8
 
 WINDOW_X = 500
 WINDOW_Y = 500
@@ -55,13 +56,13 @@ class Snake:
     # Verifica se houve uma mudança de direcao e se a direcao atual da cobra nao eh contraria
     # Armazena a nova direcao no atributo direction
     def update_direction(self):
-        if self.change_to == UP and self.direction != DOWN:
+        if self.change_to == UP: # and self.direction != DOWN:
             self.direction = UP
-        elif self.change_to == DOWN and self.direction != UP:
+        elif self.change_to == DOWN: # and self.direction != UP:
             self.direction = DOWN
-        elif self.change_to == LEFT and self.direction != RIGHT:
+        elif self.change_to == LEFT: # and self.direction != RIGHT:
             self.direction = LEFT
-        elif self.change_to == RIGHT and self.direction != LEFT:
+        elif self.change_to == RIGHT: # and self.direction != LEFT:
             self.direction = RIGHT
 
     # Atualiza posicao da cobra de acordo com a direcao recebida
@@ -318,7 +319,7 @@ class Game:
                 commands.append(DOWN)
             elif y1 > y2:
                 commands.append(UP)
- 
+
         return commands
 
     # Define as coordenadas das frutas e armazena em uma tupla
@@ -330,7 +331,13 @@ class Game:
 
     # Aplica o algoritmo de otimizacao por colonia de formigas para encontrar o melhor caminho
     def ant_colony_optimization(self):
-        colony = AntColony(self.fruits_coordinates, ant_count=NUMBER_OF_ANTS, iterations=ITERATIONS)
+        colony = AntColony(
+            self.fruits_coordinates, 
+            ant_count=NUMBER_OF_ANTS, 
+            iterations=ITERATIONS, 
+            pheromone_evaporation_rate=PHEROMONE_EVAPORATION_RATE
+        )
+
         optimal_nodes = colony.get_path()
         optimal_nodes.pop()
 
@@ -360,7 +367,7 @@ class Game:
 
         plt.gca().invert_yaxis()
         plt.show(block=False)
-        plt.pause(15)
+        plt.pause(20)
         plt.close()
 
     # A partir da lista de direcoes que a cobra deve seguir, inicia o caminho
